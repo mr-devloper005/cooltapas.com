@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { Sparkles } from 'lucide-react'
+import { Sparkles, Link2, Tag as TagIcon, ShieldCheck, Check, FileText, Eye } from 'lucide-react'
 import { NavbarShell } from '@/components/shared/navbar-shell'
 import { Footer } from '@/components/shared/footer'
 import { Button } from '@/components/ui/button'
@@ -110,65 +110,51 @@ export default function SubmitBookmarkPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-white text-slate-900">
       <NavbarShell />
 
       <main>
-        <section className="border-b border-border bg-secondary/30">
-          <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Sparkles className="h-4 w-4 text-accent" />
-              Submit a Bookmark
-            </div>
-            <h1 className="mt-2 text-3xl font-bold text-foreground">Share a link with the community.</h1>
-            <p className="mt-2 text-muted-foreground">
-              Add a short description, pick a category, and tag it for easy discovery.
+        <section className="relative overflow-hidden bg-[#0f1c4d] text-white">
+          <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+            <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] backdrop-blur">
+              <Sparkles className="h-3.5 w-3.5" /> Submit a Link
+            </span>
+            <h1 className="mt-5 text-4xl font-bold tracking-tight sm:text-5xl">Share a link with the community</h1>
+            <p className="mt-4 max-w-2xl text-base leading-8 text-slate-200 sm:text-lg">
+              Add a clear title, a short description, and a couple of tags. Your bookmark will appear in the feed for other curators to discover.
             </p>
           </div>
         </section>
 
-        <section className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
-          <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
+        <section className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
+          <div className="grid gap-8 lg:grid-cols-[1fr_340px]">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="rounded-xl border border-border bg-card p-6"
+              className="rounded-3xl bg-white p-8 shadow-md ring-1 ring-slate-200 lg:p-10"
             >
+              <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#1d3aa6]">Bookmark details</p>
+              <h2 className="mt-2 text-2xl font-bold text-slate-900">Tell us about the link</h2>
               <form
-                className="space-y-5"
+                className="mt-6 space-y-5 [&_input]:h-12 [&_input]:w-full [&_input]:rounded-xl [&_input]:border [&_input]:border-slate-300 [&_input]:bg-white [&_input]:px-4 [&_input]:text-sm [&_input]:outline-none [&_input:focus]:border-[#1d3aa6] [&_input:focus]:ring-2 [&_input:focus]:ring-[#1d3aa6]/20 [&_textarea]:w-full [&_textarea]:rounded-xl [&_textarea]:border [&_textarea]:border-slate-300 [&_textarea]:bg-white [&_textarea]:p-4 [&_textarea]:text-sm [&_textarea]:outline-none [&_textarea:focus]:border-[#1d3aa6] [&_textarea:focus]:ring-2 [&_textarea:focus]:ring-[#1d3aa6]/20"
                 onSubmit={handleSubmit}
               >
-                <div>
-                  <label className="text-sm font-medium text-foreground">URL</label>
-                  <Input
-                    placeholder="https://"
-                    className="mt-2"
-                    value={url}
-                    onChange={(event) => setUrl(event.target.value)}
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-foreground">Title</label>
-                  <Input
-                    placeholder="Give this link a clear title"
-                    className="mt-2"
-                    value={title}
-                    onChange={(event) => setTitle(event.target.value)}
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-foreground">Description</label>
-                  <Textarea
-                    placeholder="Why is this link useful?"
-                    className="mt-2 min-h-[140px]"
-                    value={description}
-                    onChange={(event) => setDescription(event.target.value)}
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-foreground">Category</label>
+                <label className="block">
+                  <span className="flex items-center gap-2 text-sm font-semibold text-slate-700"><Link2 className="h-4 w-4 text-[#1d3aa6]" /> URL</span>
+                  <Input placeholder="https://example.com/great-article" value={url} onChange={(event) => setUrl(event.target.value)} />
+                </label>
+                <label className="block">
+                  <span className="flex items-center gap-2 text-sm font-semibold text-slate-700"><FileText className="h-4 w-4 text-[#1d3aa6]" /> Title</span>
+                  <Input placeholder="Give this link a clear title" value={title} onChange={(event) => setTitle(event.target.value)} />
+                </label>
+                <label className="block">
+                  <span className="flex items-center gap-2 text-sm font-semibold text-slate-700"><Eye className="h-4 w-4 text-[#1d3aa6]" /> Description</span>
+                  <Textarea placeholder="Why is this link useful? One or two sentences is plenty." className="min-h-[140px]" value={description} onChange={(event) => setDescription(event.target.value)} />
+                </label>
+                <label className="block">
+                  <span className="flex items-center gap-2 text-sm font-semibold text-slate-700"><TagIcon className="h-4 w-4 text-[#1d3aa6]" /> Category</span>
                   <Select value={category} onValueChange={setCategory}>
-                    <SelectTrigger className="mt-2">
+                    <SelectTrigger className="mt-2 h-12 rounded-xl border-slate-300">
                       <SelectValue placeholder="Choose a category" />
                     </SelectTrigger>
                     <SelectContent>
@@ -179,61 +165,76 @@ export default function SubmitBookmarkPage() {
                       ))}
                     </SelectContent>
                   </Select>
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-foreground">Tags</label>
-                  <Input
-                    placeholder="Add tags separated by commas"
-                    className="mt-2"
-                    value={tagsInput}
-                    onChange={(event) => setTagsInput(event.target.value)}
-                  />
+                </label>
+                <label className="block">
+                  <span className="flex items-center gap-2 text-sm font-semibold text-slate-700"><TagIcon className="h-4 w-4 text-[#1d3aa6]" /> Tags</span>
+                  <Input placeholder="design, productivity, ai" value={tagsInput} onChange={(event) => setTagsInput(event.target.value)} />
                   <div className="mt-3 flex flex-wrap gap-2">
                     {['Design', 'Productivity', 'AI', 'Frontend', 'Research'].map((tag) => (
-                      <Badge key={tag} variant="outline" className="text-xs">
-                        {tag}
-                      </Badge>
+                      <button
+                        type="button"
+                        key={tag}
+                        onClick={() => setTagsInput((prev) => (prev ? `${prev}, ${tag.toLowerCase()}` : tag.toLowerCase()))}
+                        className="inline-flex items-center gap-1 rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-semibold text-slate-700 hover:border-[#1d3aa6] hover:bg-[#1d3aa6] hover:text-white"
+                      >
+                        + {tag}
+                      </button>
                     ))}
                   </div>
-                </div>
-                <div className="flex flex-wrap items-center gap-3">
-                  <Button type="submit">Submit Bookmark</Button>
+                </label>
+
+                <div className="flex flex-wrap items-center gap-3 border-t border-slate-200 pt-5">
+                  <Button type="submit" className="rounded-full bg-[#1d3aa6] px-6 py-3 text-sm font-bold text-white hover:bg-[#162d80]">
+                    Submit Bookmark
+                  </Button>
                   <Button
                     type="button"
                     variant="outline"
+                    className="rounded-full border-slate-300 text-slate-700 hover:border-[#1d3aa6]"
                     onClick={() => {
                       setStatusMessage('Draft saved locally.')
-                      toast({
-                        title: 'Draft saved',
-                        description: 'Your bookmark draft is saved on this device.',
-                      })
+                      toast({ title: 'Draft saved', description: 'Your bookmark draft is saved on this device.' })
                     }}
                   >
                     Save Draft
                   </Button>
                 </div>
                 {statusMessage && (
-                  <p className="text-sm text-muted-foreground">{statusMessage}</p>
+                  <div className="rounded-xl bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700 ring-1 ring-emerald-200">
+                    {statusMessage}
+                  </div>
                 )}
               </form>
             </motion.div>
 
-            <div className="space-y-6">
-              <div className="rounded-xl border border-border bg-secondary/30 p-5">
-                <h3 className="text-base font-semibold text-foreground">Submission Tips</h3>
-                <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-                  <li>Keep titles short and descriptive.</li>
-                  <li>Explain the main takeaway in one sentence.</li>
-                  <li>Add 3-5 tags to improve discoverability.</li>
+            <aside className="space-y-5">
+              <div className="rounded-3xl bg-[#0f1c4d] p-7 text-white shadow-md">
+                <Sparkles className="h-6 w-6" />
+                <h3 className="mt-4 text-lg font-bold">Submission Tips</h3>
+                <ul className="mt-4 space-y-3 text-sm leading-6 text-slate-200">
+                  {[
+                    'Keep titles short and descriptive.',
+                    'Explain the main takeaway in one sentence.',
+                    'Add 3-5 tags to improve discoverability.',
+                    'Private bookmarks stay off the public feed.',
+                  ].map((t) => (
+                    <li key={t} className="flex items-start gap-2">
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-300" />
+                      {t}
+                    </li>
+                  ))}
                 </ul>
               </div>
-              <div className="rounded-xl border border-border bg-card p-5">
-                <h4 className="text-sm font-semibold text-foreground">Preview Checklist</h4>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  Once submitted, your link will appear in Trending or Latest based on community votes.
+              <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#1d3aa6]/10 text-[#1d3aa6]">
+                  <ShieldCheck className="h-5 w-5" />
+                </div>
+                <h4 className="mt-4 text-base font-bold text-slate-900">Safe & respectful</h4>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  No spam, no affiliate dumps, no NSFW without tags. Community first.
                 </p>
               </div>
-            </div>
+            </aside>
           </div>
         </section>
       </main>

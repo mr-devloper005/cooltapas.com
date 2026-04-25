@@ -1,113 +1,144 @@
-import { Building2, FileText, Image as ImageIcon, Mail, MapPin, Phone, Sparkles, Bookmark } from 'lucide-react'
+'use client'
+
+import { useState, type FormEvent } from 'react'
+import { Mail, Phone, MapPin, Send, Clock, MessageSquare, HelpCircle, Sparkles, Check } from 'lucide-react'
 import { NavbarShell } from '@/components/shared/navbar-shell'
 import { Footer } from '@/components/shared/footer'
-import { SITE_CONFIG } from '@/lib/site-config'
-import { getFactoryState } from '@/design/factory/get-factory-state'
-import { getProductKind } from '@/design/factory/get-product-kind'
-import { CONTACT_PAGE_OVERRIDE_ENABLED, ContactPageOverride } from '@/overrides/contact-page'
 
-function getTone(kind: ReturnType<typeof getProductKind>) {
-  if (kind === 'directory') {
-    return {
-      shell: 'bg-[#f8fbff] text-slate-950',
-      panel: 'border border-slate-200 bg-white',
-      soft: 'border border-slate-200 bg-slate-50',
-      muted: 'text-slate-600',
-      action: 'bg-slate-950 text-white hover:bg-slate-800',
-    }
-  }
-  if (kind === 'editorial') {
-    return {
-      shell: 'bg-[#fbf6ee] text-[#241711]',
-      panel: 'border border-[#dcc8b7] bg-[#fffdfa]',
-      soft: 'border border-[#e6d6c8] bg-[#fff4e8]',
-      muted: 'text-[#6e5547]',
-      action: 'bg-[#241711] text-[#fff1e2] hover:bg-[#3a241b]',
-    }
-  }
-  if (kind === 'visual') {
-    return {
-      shell: 'bg-[#07101f] text-white',
-      panel: 'border border-white/10 bg-white/6',
-      soft: 'border border-white/10 bg-white/5',
-      muted: 'text-slate-300',
-      action: 'bg-[#8df0c8] text-[#07111f] hover:bg-[#77dfb8]',
-    }
-  }
-  return {
-    shell: 'bg-[#f7f1ea] text-[#261811]',
-    panel: 'border border-[#ddcdbd] bg-[#fffaf4]',
-    soft: 'border border-[#e8dbce] bg-[#f3e8db]',
-    muted: 'text-[#71574a]',
-    action: 'bg-[#5b2b3b] text-[#fff0f5] hover:bg-[#74364b]',
-  }
-}
+const PHONE = '(234) 345-4574'
+const EMAIL = 'hello@cooltapas.com'
+
+const CHANNELS = [
+  { icon: Mail, label: 'Email us', value: EMAIL, href: `mailto:${EMAIL}` },
+  { icon: Phone, label: 'Call us', value: PHONE, href: `tel:${PHONE.replace(/[^0-9+]/g, '')}` },
+  { icon: MessageSquare, label: 'Live chat', value: 'Mon-Fri · 9am-6pm', href: '#' },
+  { icon: Clock, label: 'Response time', value: 'Within 24 hours', href: '#' },
+]
+
+const REASONS = ['General question', 'Partnership', 'Press', 'Bug report', 'Feature request', 'Something else']
 
 export default function ContactPage() {
-  if (CONTACT_PAGE_OVERRIDE_ENABLED) {
-    return <ContactPageOverride />
+  const [sent, setSent] = useState(false)
+  const [reason, setReason] = useState('General question')
+
+  function onSubmit(e: FormEvent) {
+    e.preventDefault()
+    setSent(true)
   }
 
-  const { recipe } = getFactoryState()
-  const productKind = getProductKind(recipe)
-  const tone = getTone(productKind)
-  const lanes =
-    productKind === 'directory'
-      ? [
-          { icon: Building2, title: 'Business onboarding', body: 'Add listings, verify operational details, and bring your business surface live quickly.' },
-          { icon: Phone, title: 'Partnership support', body: 'Talk through bulk publishing, local growth, and operational setup questions.' },
-          { icon: MapPin, title: 'Coverage requests', body: 'Need a new geography or category lane? We can shape the directory around it.' },
-        ]
-      : productKind === 'editorial'
-        ? [
-            { icon: FileText, title: 'Editorial submissions', body: 'Pitch essays, columns, and long-form ideas that fit the publication.' },
-            { icon: Mail, title: 'Newsletter partnerships', body: 'Coordinate sponsorships, collaborations, and issue-level campaigns.' },
-            { icon: Sparkles, title: 'Contributor support', body: 'Get help with voice, formatting, and publication workflow questions.' },
-          ]
-        : productKind === 'visual'
-          ? [
-              { icon: ImageIcon, title: 'Creator collaborations', body: 'Discuss gallery launches, creator features, and visual campaigns.' },
-              { icon: Sparkles, title: 'Licensing and use', body: 'Reach out about usage rights, commercial requests, and visual partnerships.' },
-              { icon: Mail, title: 'Media kits', body: 'Request creator decks, editorial support, or visual feature placement.' },
-            ]
-          : [
-              { icon: Bookmark, title: 'Collection submissions', body: 'Suggest resources, boards, and links that deserve a place in the library.' },
-              { icon: Mail, title: 'Resource partnerships', body: 'Coordinate curation projects, reference pages, and link programs.' },
-              { icon: Sparkles, title: 'Curator support', body: 'Need help organizing shelves, collections, or profile-connected boards?' },
-            ]
-
   return (
-    <div className={`min-h-screen ${tone.shell}`}>
+    <div className="min-h-screen bg-white text-slate-900">
       <NavbarShell />
-      <main className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-        <section className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] opacity-70">Contact {SITE_CONFIG.name}</p>
-            <h1 className="mt-4 text-5xl font-semibold tracking-[-0.05em]">A support page that matches the product, not a generic contact form.</h1>
-            <p className={`mt-5 max-w-2xl text-sm leading-8 ${tone.muted}`}>Tell us what you are trying to publish, fix, or launch. We will route it through the right lane instead of forcing every request into the same support bucket.</p>
-            <div className="mt-8 space-y-4">
-              {lanes.map((lane) => (
-                <div key={lane.title} className={`rounded-[1.6rem] p-5 ${tone.soft}`}>
-                  <lane.icon className="h-5 w-5" />
-                  <h2 className="mt-3 text-xl font-semibold">{lane.title}</h2>
-                  <p className={`mt-2 text-sm leading-7 ${tone.muted}`}>{lane.body}</p>
+
+      <section className="relative overflow-hidden bg-[#0f1c4d] text-white">
+        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+          <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] backdrop-blur">
+            <Sparkles className="h-3.5 w-3.5" /> Get in touch
+          </span>
+          <h1 className="mt-5 text-4xl font-bold tracking-tight sm:text-5xl">
+            We'd love to hear from you.
+          </h1>
+          <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-200">
+            Questions, feedback, partnership ideas, or just saying hi — pick a channel below or drop us a note.
+          </p>
+        </div>
+      </section>
+
+      <section className="mx-auto -mt-12 max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {CHANNELS.map((c) => {
+            const Icon = c.icon
+            return (
+              <a key={c.label} href={c.href} className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-md transition hover:-translate-y-1 hover:shadow-lg">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#1d3aa6]/10 text-[#1d3aa6] group-hover:bg-[#1d3aa6] group-hover:text-white">
+                  <Icon className="h-6 w-6" />
                 </div>
-              ))}
+                <p className="mt-5 text-xs font-bold uppercase tracking-wider text-slate-500">{c.label}</p>
+                <p className="mt-1 text-base font-bold text-slate-900">{c.value}</p>
+              </a>
+            )
+          })}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="rounded-3xl bg-white p-8 shadow-md ring-1 ring-slate-200 lg:p-10">
+            <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#1d3aa6]">Send us a message</p>
+            <h2 className="mt-2 text-2xl font-bold text-slate-900">Tell us what's on your mind</h2>
+
+            {sent ? (
+              <div className="mt-8 rounded-2xl bg-emerald-50 p-8 text-center ring-1 ring-emerald-200">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+                  <Check className="h-7 w-7" />
+                </div>
+                <h3 className="mt-4 text-xl font-bold text-emerald-900">Message sent!</h3>
+                <p className="mt-2 text-sm text-emerald-800">Thanks for reaching out. We'll reply within 24 hours.</p>
+              </div>
+            ) : (
+              <form className="mt-6 grid gap-4" onSubmit={onSubmit}>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <label className="block">
+                    <span className="text-sm font-semibold text-slate-700">Full name</span>
+                    <input required className="mt-2 h-12 w-full rounded-xl border border-slate-300 bg-white px-4 text-sm outline-none focus:border-[#1d3aa6] focus:ring-2 focus:ring-[#1d3aa6]/20" placeholder="Jane Doe" />
+                  </label>
+                  <label className="block">
+                    <span className="text-sm font-semibold text-slate-700">Email</span>
+                    <input required type="email" className="mt-2 h-12 w-full rounded-xl border border-slate-300 bg-white px-4 text-sm outline-none focus:border-[#1d3aa6] focus:ring-2 focus:ring-[#1d3aa6]/20" placeholder="you@example.com" />
+                  </label>
+                </div>
+                <label className="block">
+                  <span className="text-sm font-semibold text-slate-700">Reason for contact</span>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {REASONS.map((r) => (
+                      <button
+                        type="button"
+                        key={r}
+                        onClick={() => setReason(r)}
+                        className={`rounded-full border px-4 py-2 text-xs font-semibold transition ${reason === r ? 'border-[#1d3aa6] bg-[#1d3aa6] text-white' : 'border-slate-300 bg-white text-slate-700 hover:border-[#1d3aa6]'}`}
+                      >
+                        {r}
+                      </button>
+                    ))}
+                  </div>
+                </label>
+                <label className="block">
+                  <span className="text-sm font-semibold text-slate-700">Message</span>
+                  <textarea required rows={5} className="mt-2 w-full rounded-xl border border-slate-300 bg-white p-4 text-sm outline-none focus:border-[#1d3aa6] focus:ring-2 focus:ring-[#1d3aa6]/20" placeholder="How can we help?" />
+                </label>
+                <button type="submit" className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[#1d3aa6] px-6 text-sm font-bold text-white hover:bg-[#162d80]">
+                  <Send className="h-4 w-4" /> Send message
+                </button>
+              </form>
+            )}
+          </div>
+
+          <div className="space-y-6">
+            <div className="overflow-hidden rounded-3xl shadow-md ring-1 ring-slate-200">
+              <div className="relative h-64">
+                <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=1200&q=80" alt="Global community" className="h-full w-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0f1c4d]/70 to-transparent" />
+                <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 shadow">
+                  <MapPin className="h-4 w-4 text-[#1d3aa6]" />
+                  <span className="text-xs font-bold text-slate-900">Remote-first · Worldwide</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-3xl bg-[#0f1c4d] p-8 text-white shadow-md">
+              <HelpCircle className="h-7 w-7" />
+              <h3 className="mt-4 text-xl font-bold">Looking for quick answers?</h3>
+              <p className="mt-2 text-sm leading-7 text-slate-200">
+                Our Help Center covers the most common questions about accounts, bookmarks, collections, and privacy.
+              </p>
+              <a href="/help" className="mt-5 inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-[#0f1c4d] hover:bg-slate-100">
+                Visit Help Center
+              </a>
             </div>
           </div>
+        </div>
+      </section>
 
-          <div className={`rounded-[2rem] p-7 ${tone.panel}`}>
-            <h2 className="text-2xl font-semibold">Send a message</h2>
-            <form className="mt-6 grid gap-4">
-              <input className="h-12 rounded-xl border border-current/10 bg-transparent px-4 text-sm" placeholder="Your name" />
-              <input className="h-12 rounded-xl border border-current/10 bg-transparent px-4 text-sm" placeholder="Email address" />
-              <input className="h-12 rounded-xl border border-current/10 bg-transparent px-4 text-sm" placeholder="What do you need help with?" />
-              <textarea className="min-h-[180px] rounded-2xl border border-current/10 bg-transparent px-4 py-3 text-sm" placeholder="Share the full context so we can respond with the right next step." />
-              <button type="submit" className={`inline-flex h-12 items-center justify-center rounded-full px-6 text-sm font-semibold ${tone.action}`}>Send message</button>
-            </form>
-          </div>
-        </section>
-      </main>
       <Footer />
     </div>
   )
