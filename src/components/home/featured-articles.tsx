@@ -3,15 +3,41 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, Sparkles } from 'lucide-react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { mockArticles } from '@/data/mock-data'
+import { fetchTaskPosts } from '@/lib/task-data'
+import { SITE_CONFIG } from '@/lib/site-config'
 import { cn } from '@/lib/utils'
 
 export function FeaturedArticles() {
-  const featured = mockArticles.filter(a => a.isFeatured)
-  const source = featured.length >= 5 ? featured : mockArticles
-  const [hero, second, third, ...rest] = source.slice(0, 6)
+  const [articles, setArticles] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const loadArticles = async () => {
+      try {
+        const posts = await fetchTaskPosts('article', 6)
+        setArticles(posts)
+      } catch (error) {
+        console.error('Failed to load articles:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    
+    loadArticles()
+  }, [])
+
+  if (loading) {
+    return <div>Loading articles...</div>
+  }
+
+  if (articles.length === 0) {
+    return null
+  }
+
+  const [hero, second, third, ...rest] = articles
 
   return (
     <section className="relative overflow-hidden border-b border-border py-16">
@@ -66,7 +92,7 @@ export function FeaturedArticles() {
                   {hero.excerpt}
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {hero.tags.slice(0, 4).map((tag) => (
+                  {hero.tags.slice(0, 4).map((tag: string) => (
                     <Badge key={tag} variant="outline" className="text-xs">
                       {tag}
                     </Badge>
@@ -162,7 +188,7 @@ export function FeaturedArticles() {
         </div>
 
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {rest.slice(0, 3).map((article) => (
+          {rest.slice(0, 3).map((article: any) => (
             <Link
               key={article.id}
               href={`/articles/${article.slug}`}

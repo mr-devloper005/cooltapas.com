@@ -30,15 +30,15 @@ import {
   SheetDescription,
 } from '@/components/ui/sheet'
 import { useToast } from '@/components/ui/use-toast'
-import { mockArticles } from '@/data/mock-data'
+import { fetchTaskPosts } from '@/lib/task-data'
 import type { Article } from '@/types'
 import { loadFromStorage, saveToStorage, storageKeys } from '@/lib/local-storage'
 import { useAuth } from '@/lib/auth-context'
 
-const mergeArticles = (stored: Article[]) => {
+const mergeArticles = (stored: Article[], realArticles: Article[]) => {
   const map = new Map<string, Article>()
   stored.forEach((article) => map.set(article.id, article))
-  mockArticles.forEach((article) => {
+  realArticles.forEach((article) => {
     if (!map.has(article.id)) {
       map.set(article.id, article)
     }
@@ -49,12 +49,12 @@ const mergeArticles = (stored: Article[]) => {
 export default function DashboardArticlesPage() {
   const { toast } = useToast()
   const { user } = useAuth()
-  const [articles, setArticles] = useState<Article[]>(() => [...mockArticles])
+  const [articles, setArticles] = useState<Article[]>([])
+  const [realArticles, setRealArticles] = useState<Article[]>([])
+  const [loading, setLoading] = useState(true)
   const [deleteId, setDeleteId] = useState<string | null>(null)
   const [selectedIds, setSelectedIds] = useState<string[]>([])
-  const [statusMap, setStatusMap] = useState<Record<string, string>>(() =>
-    Object.fromEntries(mockArticles.map((article) => [article.id, 'published']))
-  )
+  const [statusMap, setStatusMap] = useState<Record<string, string>>({})
   const [editingId, setEditingId] = useState<string | null>(null)
   const [draftTitle, setDraftTitle] = useState('')
   const [activeSheetId, setActiveSheetId] = useState<string | null>(null)
@@ -71,10 +71,54 @@ export default function DashboardArticlesPage() {
   )
 
   useEffect(() => {
-    const stored = loadFromStorage<Article[]>(storageKeys.articles, [])
-    const merged = mergeArticles(stored)
-    setArticles(merged)
-    setStatusMap(Object.fromEntries(merged.map((article) => [article.id, article.status ?? 'published'])))
+    const loadData = async () => {
+      try {
+        // Load real articles from the API
+        const realPosts = await fetchTaskPosts('article', 100)
+        // Convert SitePost to Article format
+        const convertedArticles = realPosts.map((post: any) => ({
+          id: post.id,
+          title: post.title,
+          slug: post.slug,
+          excerpt: post.summary || '',
+          content: post.content?.description || '',
+          coverImage: post.media?.[0]?.url || '/placeholder.svg',
+          author: {
+            id: post.authorName || 'unknown',
+            name: post.authorName || 'Unknown Author',
+            email: `${post.authorName || 'unknown'}@example.com`,
+            avatar: '/placeholder-avatar.jpg',
+            bio: '',
+            joinedDate: new Date().toISOString(),
+            followers: 0,
+            following: 0,
+            isVerified: false
+          },
+          category: post.content?.category || 'General',
+          tags: post.tags || [],
+          publishedAt: post.publishedAt,
+          readTime: 5,
+          views: 0,
+          likes: 0,
+          commentsCount: 0,
+          isFeatured: false,
+          status: 'published' as const
+        }))
+        setRealArticles(convertedArticles)
+        
+        // Load stored user articles
+        const stored = loadFromStorage<Article[]>(storageKeys.articles, [])
+        const merged = mergeArticles(stored, convertedArticles)
+        setArticles(merged)
+        setStatusMap(Object.fromEntries(merged.map((article) => [article.id, article.status ?? 'published'])))
+      } catch (error) {
+        console.error('Failed to load articles:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    
+    loadData()
   }, [])
 
   const persistUserArticles = (nextArticles: Article[]) => {
@@ -122,7 +166,15 @@ export default function DashboardArticlesPage() {
         </Button>
       }
     >
-      {selectedCount > 0 && (
+      {loading ? (
+        <Card className="border-border bg-card">
+          <CardContent className="p-8 text-center text-sm text-muted-foreground">
+            Loading articles...
+          </CardContent>
+        </Card>
+      ) : (
+        <>
+          {selectedCount > 0 && (
         <Card className="border-border bg-secondary/40 mb-4">
           <CardContent className="p-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div className="text-sm text-muted-foreground">
@@ -251,6 +303,8 @@ export default function DashboardArticlesPage() {
           </Card>
         )}
       </div>
+        </>
+      )}
 
       <Dialog open={Boolean(deleteId)} onOpenChange={() => setDeleteId(null)}>
         <DialogContent>

@@ -6,7 +6,7 @@ import { Footer } from '@/components/shared/footer'
 import { fetchTaskPosts } from '@/lib/task-data'
 import type { TaskKey } from '@/lib/site-config'
 
-export const TASK_LIST_PAGE_OVERRIDE_ENABLED = true
+export const TASK_LIST_PAGE_OVERRIDE_ENABLED = false
 
 const CATEGORIES = [
   { name: 'Technology', count: 1240 },
