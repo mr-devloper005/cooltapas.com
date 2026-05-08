@@ -376,8 +376,6 @@ export default function DashboardSavedPage() {
           )}
         </div>
       </div>
-        )}
-      )}
 
       <Dialog open={confirmClear} onOpenChange={setConfirmClear}>
         <DialogContent>
