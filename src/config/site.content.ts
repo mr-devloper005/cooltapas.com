@@ -185,7 +185,11 @@ export const taskIntroCopy: Record<
       'Bookmarks stay connected to the rest of the platform, making it easier to move from a saved link into related stories, listings, or resources.',
       'Use this section to organize helpful sources and discover connected content without leaving the broader site experience.',
     ],
-    links: [],
+    links: [
+      { label: 'Browse articles', href: '/articles' },
+      { label: 'Explore listings', href: '/listings' },
+      { label: 'Open PDFs', href: '/pdf' },
+    ],
   },
   pdf: {
     title: 'PDFs, documents, and downloadable files',

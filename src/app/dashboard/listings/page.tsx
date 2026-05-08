@@ -30,15 +30,15 @@ import {
   SheetDescription,
 } from '@/components/ui/sheet'
 import { useToast } from '@/components/ui/use-toast'
-import { fetchTaskPosts } from '@/lib/task-data'
+import { mockListings } from '@/data/mock-data'
 import type { Listing } from '@/types'
 import { loadFromStorage, saveToStorage, storageKeys } from '@/lib/local-storage'
 import { useAuth } from '@/lib/auth-context'
 
-const mergeListings = (stored: Listing[], realListings: Listing[]) => {
+const mergeListings = (stored: Listing[]) => {
   const map = new Map<string, Listing>()
   stored.forEach((listing) => map.set(listing.id, listing))
-  realListings.forEach((listing) => {
+  mockListings.forEach((listing) => {
     if (!map.has(listing.id)) {
       map.set(listing.id, listing)
     }
@@ -49,12 +49,12 @@ const mergeListings = (stored: Listing[], realListings: Listing[]) => {
 export default function DashboardListingsPage() {
   const { toast } = useToast()
   const { user } = useAuth()
-  const [listings, setListings] = useState<Listing[]>([])
-  const [realListings, setRealListings] = useState<Listing[]>([])
-  const [loading, setLoading] = useState(true)
+  const [listings, setListings] = useState<Listing[]>(() => [...mockListings])
   const [deleteId, setDeleteId] = useState<string | null>(null)
   const [selectedIds, setSelectedIds] = useState<string[]>([])
-  const [statusMap, setStatusMap] = useState<Record<string, string>>({})
+  const [statusMap, setStatusMap] = useState<Record<string, string>>(() =>
+    Object.fromEntries(mockListings.map((listing) => [listing.id, listing.status]))
+  )
   const [editingId, setEditingId] = useState<string | null>(null)
   const [draftTitle, setDraftTitle] = useState('')
   const [activeSheetId, setActiveSheetId] = useState<string | null>(null)
@@ -71,61 +71,10 @@ export default function DashboardListingsPage() {
   )
 
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        // Load real listings from the API
-        const realPosts = await fetchTaskPosts('listing', 100)
-        // Convert SitePost to Listing format
-        const convertedListings = realPosts.map((post: any) => ({
-          id: post.id,
-          title: post.title,
-          slug: post.slug,
-          description: post.summary || '',
-          images: post.media?.map((m: any) => m.url) || [],
-          category: post.content?.category || 'General',
-          subcategory: '',
-          location: post.content?.location || '',
-          address: '',
-          priceRange: '',
-          rating: 0,
-          reviewsCount: 0,
-          tags: post.tags || [],
-          amenities: [],
-          contactPhone: post.content?.phone || '',
-          contactEmail: '',
-          website: post.content?.website || '',
-          hours: [],
-          owner: {
-            id: post.authorName || 'unknown',
-            name: post.authorName || 'Unknown Owner',
-            email: `${post.authorName || 'unknown'}@example.com`,
-            avatar: '/placeholder-avatar.jpg',
-            bio: '',
-            joinedDate: new Date().toISOString(),
-            followers: 0,
-            following: 0,
-            isVerified: false
-          },
-          createdAt: post.publishedAt,
-          isFeatured: false,
-          isVerified: false,
-          status: 'active' as const
-        }))
-        setRealListings(convertedListings)
-        
-        // Load stored user listings
-        const stored = loadFromStorage<Listing[]>(storageKeys.listings, [])
-        const merged = mergeListings(stored, convertedListings)
-        setListings(merged)
-        setStatusMap(Object.fromEntries(merged.map((listing) => [listing.id, listing.status])))
-      } catch (error) {
-        console.error('Failed to load listings:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-    
-    loadData()
+    const stored = loadFromStorage<Listing[]>(storageKeys.listings, [])
+    const merged = mergeListings(stored)
+    setListings(merged)
+    setStatusMap(Object.fromEntries(merged.map((listing) => [listing.id, listing.status])))
   }, [])
 
   const persistUserListings = (nextListings: Listing[]) => {
@@ -173,15 +122,7 @@ export default function DashboardListingsPage() {
         </Button>
       }
     >
-      {loading ? (
-        <Card className="border-border bg-card">
-          <CardContent className="p-8 text-center text-sm text-muted-foreground">
-            Loading listings...
-          </CardContent>
-        </Card>
-      ) : (
-        <>
-          {selectedCount > 0 && (
+      {selectedCount > 0 && (
         <Card className="border-border bg-secondary/40 mb-4">
           <CardContent className="p-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div className="text-sm text-muted-foreground">{selectedCount} selected</div>
@@ -303,8 +244,6 @@ export default function DashboardListingsPage() {
           </Card>
         )}
       </div>
-        </>
-      )}
 
       <Dialog open={Boolean(deleteId)} onOpenChange={() => setDeleteId(null)}>
         <DialogContent>

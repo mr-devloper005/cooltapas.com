@@ -14,8 +14,7 @@ import {
   Bike,
   Building
 } from 'lucide-react'
-import { fetchTaskPosts } from '@/lib/task-data'
-import { useState, useEffect } from 'react'
+import { mockCategories } from '@/data/mock-data'
 
 const iconMap: Record<string, React.ElementType> = {
   Monitor,
@@ -31,60 +30,6 @@ const iconMap: Record<string, React.ElementType> = {
 }
 
 export function CategorySection() {
-  const [categories, setCategories] = useState<any[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const loadCategories = async () => {
-      try {
-        // For categories, we'll fetch from different task types to build a real category list
-        const [listings, articles, classifieds] = await Promise.all([
-          fetchTaskPosts('listing', 100),
-          fetchTaskPosts('article', 100),
-          fetchTaskPosts('classified', 100)
-        ])
-        
-        // Extract unique categories from real posts
-        const allPosts = [...listings, ...articles, ...classifieds]
-        const categoryMap = new Map()
-        
-        allPosts.forEach(post => {
-          const category = post.content?.category || 'General'
-          if (categoryMap.has(category)) {
-            categoryMap.set(category, categoryMap.get(category) + 1)
-          } else {
-            categoryMap.set(category, 1)
-          }
-        })
-        
-        const categoryList = Array.from(categoryMap.entries())
-          .map(([name, count], index) => ({
-            id: index.toString(),
-            name,
-            slug: name.toLowerCase().replace(/\s+/g, '-'),
-            count,
-            icon: 'Monitor' // Default icon
-          }))
-          .slice(0, 10) // Limit to 10 categories
-          
-        setCategories(categoryList)
-      } catch (error) {
-        console.error('Failed to load categories:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-    
-    loadCategories()
-  }, [])
-
-  if (loading) {
-    return <div>Loading categories...</div>
-  }
-
-  if (categories.length === 0) {
-    return null
-  }
   return (
     <section className="border-b border-border py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -98,7 +43,7 @@ export function CategorySection() {
         </div>
 
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
-          {categories.map((category: any, index: number) => {
+          {mockCategories.map((category, index) => {
             const Icon = iconMap[category.icon] || Monitor
             return (
               <motion.div

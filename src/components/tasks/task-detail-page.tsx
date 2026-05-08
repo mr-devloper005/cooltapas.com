@@ -1,7 +1,7 @@
 import { ContentImage } from "@/components/shared/content-image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ExternalLink, Globe, Mail, MapPin, Phone, Tag } from "lucide-react";
+import { MapPin, Globe, Phone, Tag, Mail } from "lucide-react";
 import { NavbarShell } from "@/components/shared/navbar-shell";
 import { Footer } from "@/components/shared/footer";
 import { TaskPostCard } from "@/components/shared/task-post-card";
@@ -316,145 +316,22 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
                   </div>
                 ) : null}
 
-                {isBookmark ? (
-                  <div className="mt-6">
-                    <div className="rounded-3xl border border-border/50 bg-gradient-to-br from-white to-gray-50/50 p-8 shadow-lg backdrop-blur-sm">
-                      <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:gap-10">
-                        
-                        {/* Content Section */}
-                        <div className="flex-1 min-w-0">
-                          <div className="flex flex-wrap items-center gap-3 text-sm text-gray-600 mb-4">
-                            <Badge className="bg-gradient-to-r from-blue-500 to-purple-500 text-white border-0 px-3 py-1">
-                              <Tag className="h-3.5 w-3.5 mr-1" />
-                              {category}
-                            </Badge>
-                            {location && (
-                              <span className="inline-flex items-center gap-1 px-3 py-1 bg-gray-100 rounded-full">
-                                <MapPin className="h-3.5 w-3.5 text-gray-600" />
-                                <span className="text-gray-700">{location}</span>
-                              </span>
-                            )}
-                          </div>
-                          <h1 className="text-3xl font-bold text-gray-900 mb-4 lg:text-4xl bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-                            {post.title}
-                          </h1>
-                          <div className="prose prose-lg max-w-none text-gray-600 leading-relaxed">
-                            <RichContent html={descriptionHtml} />
-                          </div>
-                        </div>
-
-                        {/* Action Buttons Section */}
-                        <div className="flex flex-col gap-3 lg:flex-shrink-0 lg:w-48">
-                          {content.website && (
-                            <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white border-0 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5" asChild>
-                              <a href={content.website} target="_blank" rel="noreferrer">
-                                <Globe className="mr-2 h-4 w-4" />
-                                Visit Website
-                              </a>
-                            </Button>
-                          )}
-                          {content.phone && (
-                            <Button variant="outline" className="w-full border-gray-300 hover:border-blue-500 hover:bg-blue-50 transition-all duration-300" asChild>
-                              <a href={`tel:${content.phone}`}>
-                                <Phone className="mr-2 h-4 w-4" />
-                                Call Now
-                              </a>
-                            </Button>
-                          )}
-                          {content.email && (
-                            <Button variant="outline" className="w-full border-gray-300 hover:border-purple-500 hover:bg-purple-50 transition-all duration-300" asChild>
-                              <a href={`mailto:${content.email}`}>
-                                <Mail className="mr-2 h-4 w-4" />
-                                Email
-                              </a>
-                            </Button>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Additional Details Section */}
-                      <div className="mt-8 pt-8 border-t border-gray-200">
-                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                          {content.website && (
-                            <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200">
-                              <div className="p-2 bg-white rounded-lg shadow-sm">
-                                <Globe className="h-5 w-5 text-blue-600" />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <div className="text-xs text-gray-500 mb-1">Website</div>
-                                <a
-                                  href={content.website}
-                                  className="text-sm font-medium text-gray-900 hover:text-blue-600 hover:underline truncate block"
-                                  target="_blank"
-                                  rel="noreferrer"
-                                >
-                                  {content.website}
-                                </a>
-                              </div>
-                            </div>
-                          )}
-                          {content.phone && (
-                            <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200">
-                              <div className="p-2 bg-white rounded-lg shadow-sm">
-                                <Phone className="h-5 w-5 text-green-600" />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <div className="text-xs text-gray-500 mb-1">Phone</div>
-                                <a href={`tel:${content.phone}`} className="text-sm font-medium text-gray-900 hover:text-green-600 hover:underline truncate block">
-                                  {content.phone}
-                                </a>
-                              </div>
-                            </div>
-                          )}
-                          {content.email && (
-                            <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200">
-                              <div className="p-2 bg-white rounded-lg shadow-sm">
-                                <Mail className="h-5 w-5 text-purple-600" />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <div className="text-xs text-gray-500 mb-1">Email</div>
-                                <a
-                                  href={`mailto:${content.email}`}
-                                  className="text-sm font-medium text-gray-900 hover:text-purple-600 hover:underline truncate block"
-                                >
-                                  {content.email}
-                                </a>
-                              </div>
-                            </div>
-                          )}
-                          {location && (
-                            <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200">
-                              <div className="p-2 bg-white rounded-lg shadow-sm">
-                                <MapPin className="h-5 w-5 text-red-600" />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <div className="text-xs text-gray-500 mb-1">Location</div>
-                                <span className="text-sm font-medium text-gray-900 truncate block">{location}</span>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
+                <div className={cn(isClassified ? "mx-auto w-full max-w-4xl" : "mt-6")}>
+                  <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+                    <Badge variant="secondary" className="inline-flex items-center gap-1">
+                      <Tag className="h-3.5 w-3.5" />
+                      {category}
+                    </Badge>
+                    {location && (
+                      <span className="inline-flex items-center gap-1">
+                        <MapPin className="h-4 w-4" />
+                        {location}
+                      </span>
+                    )}
                   </div>
-                ) : (
-                  <div className={cn(isClassified ? "mx-auto w-full max-w-4xl" : "mt-6")}>
-                    <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-                      <Badge variant="secondary" className="inline-flex items-center gap-1">
-                        <Tag className="h-3.5 w-3.5" />
-                        {category}
-                      </Badge>
-                      {location && (
-                        <span className="inline-flex items-center gap-1">
-                          <MapPin className="h-4 w-4" />
-                          {location}
-                        </span>
-                      )}
-                    </div>
-                    <h1 className="mt-4 text-3xl font-semibold text-foreground">{post.title}</h1>
-                    <RichContent html={descriptionHtml} className="mt-3 max-w-3xl" />
-                  </div>
-                )}
+                  <h1 className="mt-4 text-3xl font-semibold text-foreground">{post.title}</h1>
+                  <RichContent html={descriptionHtml} className="mt-3 max-w-3xl" />
+                </div>
               </>
             ) : null}
 
@@ -614,52 +491,17 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
                 </Link>
               )}
             </div>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {related.map((item) => {
-                const href = buildPostUrl(task, item.slug);
-                
-                // For SBM, use simple title-only card
-                if (task === 'sbm') {
-                  // Get category from item content
-                  const itemContent = item.content && typeof item.content === "object" ? item.content : {};
-                  const category = typeof (itemContent as any).category === "string" ? (itemContent as any).category : "General";
-                  
-                  return (
-                    <Link key={item.id} href={href} className="group flex flex-col gap-3 p-4 rounded-xl border border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm transition-all duration-200">
-                      <div className="flex items-start gap-3">
-                        <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center group-hover:bg-slate-200 transition-colors">
-                          <ExternalLink className="h-4 w-4 text-slate-600" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h3 className="text-sm font-medium text-slate-900 group-hover:text-slate-700 truncate">
-                            {item.title}
-                          </h3>
-                          <div className="mt-2">
-                            <span className="inline-flex items-center gap-1 rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700">
-                              <Tag className="h-3 w-3" />
-                              {category}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </Link>
-                  );
-                }
-                
-                // For other tasks, use regular TaskPostCard
-                return (
-                  <TaskPostCard
-                    key={item.id}
-                    post={item}
-                    href={href}
-                    taskKey={task}
-                  />
-                );
-              })}
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {related.map((item) => (
+                <TaskPostCard
+                  key={item.id}
+                  post={item}
+                  href={buildPostUrl(task, item.slug)}
+                />
+              ))}
             </div>
             </>
           ) : null}
-          {task !== 'sbm' && (
           <nav className="mt-6 rounded-2xl border border-border bg-card/60 p-4">
             <p className="text-sm font-semibold text-foreground">Related links</p>
             <ul className="mt-2 space-y-2 text-sm">
@@ -693,7 +535,6 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
               </li>
             </ul>
           </nav>
-        )}
         </section>
       </main>
       <Footer />
