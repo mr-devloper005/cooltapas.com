@@ -72,26 +72,6 @@ const FAQS = [
   },
 ]
 
-const ARTICLES = [
-  {
-    title: '10 Habits of Highly Effective Bookmark Curators',
-    tag: 'Productivity',
-    date: 'Apr 18, 2026',
-    img: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&q=80',
-  },
-  {
-    title: 'How Tagging Beats Folders Every Time',
-    tag: 'Workflow',
-    date: 'Apr 12, 2026',
-    img: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800&q=80',
-  },
-  {
-    title: 'Building a Reading Shelf That Actually Gets Read',
-    tag: 'Reading',
-    date: 'Apr 05, 2026',
-    img: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&q=80',
-  },
-]
 
 const TESTIMONIAL = {
   quote:
@@ -422,43 +402,7 @@ export async function HomePageOverride() {
         </div>
       </section>
 
-      {/* ARTICLES */}
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-        <div className="flex items-end justify-between gap-4">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#1d3aa6]">From the Blog</p>
-            <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
-              Latest Bookmarking Articles
-            </h2>
-          </div>
-          <Link href="/blog" className="hidden text-sm font-semibold text-[#1d3aa6] hover:underline sm:block">
-            View all →
-          </Link>
-        </div>
-
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
-          {ARTICLES.map((a) => (
-            <article key={a.title} className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-lg">
-              <div className="relative h-48 overflow-hidden">
-                <img src={a.img} alt={a.title} className="h-full w-full object-cover transition group-hover:scale-105" />
-                <span className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1 text-xs font-bold text-[#1d3aa6]">
-                  {a.tag}
-                </span>
-              </div>
-              <div className="p-5">
-                <p className="text-xs font-semibold text-slate-500">{a.date}</p>
-                <h3 className="mt-2 text-lg font-bold leading-snug text-slate-900 group-hover:text-[#1d3aa6]">
-                  {a.title}
-                </h3>
-                <Link href="/blog" className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#1d3aa6] hover:gap-2">
-                  Read more <ArrowRight className="h-4 w-4" />
-                </Link>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
+      
       <Footer />
     </div>
   )
