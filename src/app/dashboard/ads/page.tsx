@@ -30,15 +30,15 @@ import {
   SheetDescription,
 } from '@/components/ui/sheet'
 import { useToast } from '@/components/ui/use-toast'
-import { fetchTaskPosts } from '@/lib/task-data'
+import { mockClassifiedAds } from '@/data/mock-data'
 import type { ClassifiedAd } from '@/types'
 import { loadFromStorage, saveToStorage, storageKeys } from '@/lib/local-storage'
 import { useAuth } from '@/lib/auth-context'
 
-const mergeAds = (stored: ClassifiedAd[], realAds: ClassifiedAd[]) => {
+const mergeAds = (stored: ClassifiedAd[]) => {
   const map = new Map<string, ClassifiedAd>()
   stored.forEach((ad) => map.set(ad.id, ad))
-  realAds.forEach((ad) => {
+  mockClassifiedAds.forEach((ad) => {
     if (!map.has(ad.id)) {
       map.set(ad.id, ad)
     }
@@ -49,12 +49,12 @@ const mergeAds = (stored: ClassifiedAd[], realAds: ClassifiedAd[]) => {
 export default function DashboardAdsPage() {
   const { toast } = useToast()
   const { user } = useAuth()
-  const [ads, setAds] = useState<ClassifiedAd[]>([])
-  const [realAds, setRealAds] = useState<ClassifiedAd[]>([])
-  const [loading, setLoading] = useState(true)
+  const [ads, setAds] = useState<ClassifiedAd[]>(() => [...mockClassifiedAds])
   const [deleteId, setDeleteId] = useState<string | null>(null)
   const [selectedIds, setSelectedIds] = useState<string[]>([])
-  const [statusMap, setStatusMap] = useState<Record<string, string>>({})
+  const [statusMap, setStatusMap] = useState<Record<string, string>>(() =>
+    Object.fromEntries(mockClassifiedAds.map((ad) => [ad.id, ad.status]))
+  )
   const [editingId, setEditingId] = useState<string | null>(null)
   const [draftTitle, setDraftTitle] = useState('')
   const [activeSheetId, setActiveSheetId] = useState<string | null>(null)
@@ -71,56 +71,10 @@ export default function DashboardAdsPage() {
   )
 
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        // Load real ads from the API
-        const realPosts = await fetchTaskPosts('classified', 100)
-        // Convert SitePost to ClassifiedAd format
-        const convertedAds = realPosts.map((post: any) => ({
-          id: post.id,
-          title: post.title,
-          slug: post.slug,
-          description: post.summary || '',
-          images: post.media?.map((m: any) => m.url) || [],
-          category: post.content?.category || 'General',
-          subcategory: '',
-          price: 0,
-          currency: 'USD',
-          condition: 'good' as const,
-          location: post.content?.location || '',
-          seller: {
-            id: post.authorName || 'unknown',
-            name: post.authorName || 'Unknown Seller',
-            email: `${post.authorName || 'unknown'}@example.com`,
-            avatar: '/placeholder-avatar.jpg',
-            bio: '',
-            joinedDate: new Date().toISOString(),
-            followers: 0,
-            following: 0,
-            isVerified: false
-          },
-          createdAt: post.publishedAt,
-          views: 0,
-          saves: 0,
-          isFeatured: false,
-          isNegotiable: false,
-          status: 'active' as const
-        }))
-        setRealAds(convertedAds)
-        
-        // Load stored user ads
-        const stored = loadFromStorage<ClassifiedAd[]>(storageKeys.ads, [])
-        const merged = mergeAds(stored, convertedAds)
-        setAds(merged)
-        setStatusMap(Object.fromEntries(merged.map((ad) => [ad.id, ad.status])))
-      } catch (error) {
-        console.error('Failed to load ads:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-    
-    loadData()
+    const stored = loadFromStorage<ClassifiedAd[]>(storageKeys.ads, [])
+    const merged = mergeAds(stored)
+    setAds(merged)
+    setStatusMap(Object.fromEntries(merged.map((ad) => [ad.id, ad.status])))
   }, [])
 
   const persistUserAds = (nextAds: ClassifiedAd[]) => {
@@ -166,15 +120,7 @@ export default function DashboardAdsPage() {
         </Button>
       }
     >
-      {loading ? (
-        <Card className="border-border bg-card">
-          <CardContent className="p-8 text-center text-sm text-muted-foreground">
-            Loading ads...
-          </CardContent>
-        </Card>
-      ) : (
-        <>
-          {selectedCount > 0 && (
+      {selectedCount > 0 && (
         <Card className="border-border bg-secondary/40 mb-4">
           <CardContent className="p-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div className="text-sm text-muted-foreground">{selectedCount} selected</div>
@@ -302,8 +248,6 @@ export default function DashboardAdsPage() {
           </Card>
         )}
       </div>
-        </>
-      )}
 
       <Dialog open={Boolean(deleteId)} onOpenChange={() => setDeleteId(null)}>
         <DialogContent>

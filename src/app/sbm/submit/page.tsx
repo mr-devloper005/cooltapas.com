@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { mockBookmarks } from '@/data/mock-data'
 import { useAuth } from '@/lib/auth-context'
 import { useToast } from '@/components/ui/use-toast'
 import { loadFromStorage, saveToStorage, storageKeys } from '@/lib/local-storage'
@@ -27,22 +28,7 @@ export default function SubmitBookmarkPage() {
   const { user } = useAuth()
   const { toast } = useToast()
   const categoryOptions = useMemo(
-    () => [
-      'Design',
-      'Technology',
-      'Productivity',
-      'Development',
-      'Business',
-      'Marketing',
-      'Research',
-      'Education',
-      'Tools',
-      'Resources',
-      'Inspiration',
-      'News',
-      'Tutorial',
-      'General'
-    ],
+    () => Array.from(new Set(mockBookmarks.map((bookmark) => bookmark.category))),
     []
   )
   const [statusMessage, setStatusMessage] = useState('')

@@ -4,35 +4,10 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ClassifiedAdCard } from '@/components/shared/cards'
-import { fetchTaskPosts } from '@/lib/task-data'
-import { useState, useEffect } from 'react'
+import { mockClassifiedAds } from '@/data/mock-data'
 
 export function FeaturedAds() {
-  const [ads, setAds] = useState<any[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const loadAds = async () => {
-      try {
-        const posts = await fetchTaskPosts('classified', 4)
-        setAds(posts)
-      } catch (error) {
-        console.error('Failed to load ads:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-    
-    loadAds()
-  }, [])
-
-  if (loading) {
-    return <div>Loading classifieds...</div>
-  }
-
-  if (ads.length === 0) {
-    return null
-  }
+  const featuredAds = mockClassifiedAds.filter(a => a.isFeatured).slice(0, 4)
 
   return (
     <section className="border-b border-border py-16">
@@ -55,7 +30,7 @@ export function FeaturedAds() {
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {ads.map((ad: any) => (
+          {featuredAds.map((ad) => (
             <ClassifiedAdCard key={ad.id} ad={ad} />
           ))}
         </div>

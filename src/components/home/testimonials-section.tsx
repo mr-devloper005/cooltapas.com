@@ -4,37 +4,9 @@ import { motion } from 'framer-motion'
 import { Star, Quote } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Card, CardContent } from '@/components/ui/card'
-import { fetchTaskPosts } from '@/lib/task-data'
-import { useState, useEffect } from 'react'
+import { mockTestimonials } from '@/data/mock-data'
 
 export function TestimonialsSection() {
-  const [testimonials, setTestimonials] = useState<any[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const loadTestimonials = async () => {
-      try {
-        // Since testimonials might not have a specific task type,
-        // we'll check if there are any posts that could serve as testimonials
-        // or return empty if no real testimonials exist
-        setTestimonials([])
-      } catch (error) {
-        console.error('Failed to load testimonials:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-    
-    loadTestimonials()
-  }, [])
-
-  if (loading) {
-    return <div>Loading testimonials...</div>
-  }
-
-  if (testimonials.length === 0) {
-    return null
-  }
   return (
     <section className="border-b border-border py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -48,7 +20,7 @@ export function TestimonialsSection() {
         </div>
 
         <div className="grid gap-6 md:grid-cols-3">
-          {testimonials.map((testimonial: any, index: number) => (
+          {mockTestimonials.map((testimonial, index) => (
             <motion.div
               key={testimonial.id}
               initial={{ opacity: 0, y: 20 }}

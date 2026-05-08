@@ -71,11 +71,11 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
       }
     : layoutKey.startsWith('article') || layoutKey.startsWith('sbm')
       ? {
-          muted: 'text-slate-600',
-          panel: 'border border-slate-200 bg-white/90',
-          soft: 'border border-slate-200 bg-slate-50',
-          input: 'border border-slate-200 bg-white text-slate-950',
-          button: 'bg-slate-950 text-white hover:bg-slate-800',
+          muted: 'text-[#72594a]',
+          panel: 'border border-[#dbc6b6] bg-white/90',
+          soft: 'border border-[#dbc6b6] bg-[#fff8ef]',
+          input: 'border border-[#dbc6b6] bg-white text-[#2f1d16]',
+          button: 'bg-[#2f1d16] text-[#fff4e4] hover:bg-[#452920]',
         }
       : {
           muted: 'text-slate-600',

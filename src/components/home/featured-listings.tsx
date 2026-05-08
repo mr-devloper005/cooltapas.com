@@ -4,35 +4,10 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ListingCard } from '@/components/shared/cards'
-import { fetchTaskPosts } from '@/lib/task-data'
-import { useState, useEffect } from 'react'
+import { mockListings } from '@/data/mock-data'
 
 export function FeaturedListings() {
-  const [listings, setListings] = useState<any[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const loadListings = async () => {
-      try {
-        const posts = await fetchTaskPosts('listing', 4)
-        setListings(posts)
-      } catch (error) {
-        console.error('Failed to load listings:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-    
-    loadListings()
-  }, [])
-
-  if (loading) {
-    return <div>Loading listings...</div>
-  }
-
-  if (listings.length === 0) {
-    return null
-  }
+  const featuredListings = mockListings.filter(l => l.isFeatured).slice(0, 4)
 
   return (
     <section className="border-b border-border py-16">
@@ -55,7 +30,7 @@ export function FeaturedListings() {
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {listings.map((listing: any) => (
+          {featuredListings.map((listing) => (
             <ListingCard key={listing.id} listing={listing} />
           ))}
         </div>
