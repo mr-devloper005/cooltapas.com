@@ -5,12 +5,17 @@ import Image from 'next/image'
 import { ArrowRight, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { mockArticles } from '@/data/mock-data'
 import { cn } from '@/lib/utils'
+import { useMemo } from 'react'
+import { loadFromStorage, storageKeys } from '@/lib/local-storage'
+import type { Article } from '@/types'
 
 export function FeaturedArticles() {
-  const featured = mockArticles.filter(a => a.isFeatured)
-  const source = featured.length >= 5 ? featured : mockArticles
+  const source = useMemo(
+    () => loadFromStorage<Article[]>(storageKeys.articles, []),
+    []
+  )
+  if (!source.length) return null
   const [hero, second, third, ...rest] = source.slice(0, 6)
 
   return (

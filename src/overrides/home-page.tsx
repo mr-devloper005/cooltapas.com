@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import {
-  Phone,
   ArrowRight,
   Check,
   Bookmark,
@@ -11,7 +10,6 @@ import {
   Star,
   Search,
   Globe2,
-  Sparkles,
   ShieldCheck,
   Quote,
   ChevronDown,
@@ -22,8 +20,6 @@ import { Footer } from '@/components/shared/footer'
 import { SITE_CONFIG } from '@/lib/site-config'
 
 export const HOME_PAGE_OVERRIDE_ENABLED = true
-
-const PHONE = '(234) 345-4574'
 
 const SERVICES = [
   { name: 'Curated Bookmarks', icon: Bookmark, desc: 'Hand-picked links across the web you can rely on.' },
@@ -72,26 +68,6 @@ const FAQS = [
   },
 ]
 
-const ARTICLES = [
-  {
-    title: '10 Habits of Highly Effective Bookmark Curators',
-    tag: 'Productivity',
-    date: 'Apr 18, 2026',
-    img: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&q=80',
-  },
-  {
-    title: 'How Tagging Beats Folders Every Time',
-    tag: 'Workflow',
-    date: 'Apr 12, 2026',
-    img: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800&q=80',
-  },
-  {
-    title: 'Building a Reading Shelf That Actually Gets Read',
-    tag: 'Reading',
-    date: 'Apr 05, 2026',
-    img: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&q=80',
-  },
-]
 
 const TESTIMONIAL = {
   quote:
@@ -119,10 +95,6 @@ export async function HomePageOverride() {
         />
         <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
           <div className="max-w-3xl text-white">
-            <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-white backdrop-blur">
-              <Sparkles className="h-3.5 w-3.5" />
-              Social bookmarking, reimagined
-            </span>
             <h1 className="mt-6 text-5xl font-bold leading-tight tracking-tight sm:text-6xl lg:text-7xl">
               Social
               <br />
@@ -139,19 +111,6 @@ export async function HomePageOverride() {
                 Get a Free Trial
                 <ArrowRight className="h-4 w-4" />
               </Link>
-              <a
-                href={`tel:${PHONE.replace(/[^0-9+]/g, '')}`}
-                className="inline-flex items-center gap-2 rounded-full bg-[#1d3aa6] px-6 py-3.5 text-sm font-bold text-white hover:bg-[#162d80]"
-              >
-                <Phone className="h-4 w-4" />
-                Call Us Today
-              </a>
-              <a
-                href={`tel:${PHONE.replace(/[^0-9+]/g, '')}`}
-                className="inline-flex items-center gap-2 rounded-full border border-white/30 px-6 py-3.5 text-sm font-bold text-white hover:bg-white/10"
-              >
-                {PHONE}
-              </a>
             </div>
           </div>
         </div>
@@ -190,22 +149,6 @@ export async function HomePageOverride() {
                 </li>
               ))}
             </ul>
-            <div className="mt-7 flex flex-wrap gap-3">
-              <a
-                href={`tel:${PHONE.replace(/[^0-9+]/g, '')}`}
-                className="inline-flex items-center gap-2 rounded-full bg-[#1d3aa6] px-5 py-3 text-sm font-bold text-white hover:bg-[#162d80]"
-              >
-                <Phone className="h-4 w-4" />
-                {PHONE}
-              </a>
-              <a
-                href={`tel:${PHONE.replace(/[^0-9+]/g, '')}`}
-                className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-5 py-3 text-sm font-bold text-slate-900 hover:bg-slate-50"
-              >
-                <Phone className="h-4 w-4" />
-                Call Us Today
-              </a>
-            </div>
           </div>
         </div>
       </section>
@@ -339,20 +282,6 @@ export async function HomePageOverride() {
         </div>
       </section>
 
-      {/* PHONE BAND */}
-      <section className="bg-[#1d3aa6] text-white">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-4 px-4 py-6 sm:px-6 sm:flex-row lg:px-8">
-          <a href={`tel:${PHONE.replace(/[^0-9+]/g, '')}`} className="inline-flex items-center gap-3 text-xl font-bold hover:text-blue-100">
-            <Phone className="h-5 w-5" />
-            {PHONE}
-          </a>
-          <span className="hidden h-6 w-px bg-white/30 sm:block" />
-          <a href={`tel:${PHONE.replace(/[^0-9+]/g, '')}`} className="inline-flex items-center gap-2 text-lg font-semibold hover:text-blue-100">
-            <Phone className="h-4 w-4" /> Call Us Today
-          </a>
-        </div>
-      </section>
-
       {/* CATEGORIES / "SERVICE AREAS" */}
       <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8" id="categories">
         <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-center">
@@ -420,46 +349,8 @@ export async function HomePageOverride() {
             ))}
           </div>
         </div>
-      </section>
-
-      {/* ARTICLES */}
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-        <div className="flex items-end justify-between gap-4">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#1d3aa6]">From the Blog</p>
-            <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
-              Latest Bookmarking Articles
-            </h2>
-          </div>
-          <Link href="/blog" className="hidden text-sm font-semibold text-[#1d3aa6] hover:underline sm:block">
-            View all →
-          </Link>
-        </div>
-
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
-          {ARTICLES.map((a) => (
-            <article key={a.title} className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-lg">
-              <div className="relative h-48 overflow-hidden">
-                <img src={a.img} alt={a.title} className="h-full w-full object-cover transition group-hover:scale-105" />
-                <span className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1 text-xs font-bold text-[#1d3aa6]">
-                  {a.tag}
-                </span>
-              </div>
-              <div className="p-5">
-                <p className="text-xs font-semibold text-slate-500">{a.date}</p>
-                <h3 className="mt-2 text-lg font-bold leading-snug text-slate-900 group-hover:text-[#1d3aa6]">
-                  {a.title}
-                </h3>
-                <Link href="/blog" className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#1d3aa6] hover:gap-2">
-                  Read more <ArrowRight className="h-4 w-4" />
-                </Link>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <Footer />
+      </section>`n      <Footer />
     </div>
   )
 }
+

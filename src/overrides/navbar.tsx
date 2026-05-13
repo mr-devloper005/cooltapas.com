@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { Menu, X, Phone, Bookmark, LogOut, User as UserIcon, ChevronDown } from 'lucide-react'
+import { Menu, X, LogOut, User as UserIcon, ChevronDown } from 'lucide-react'
 import { useAuth } from '@/lib/auth-context'
 import { SITE_CONFIG } from '@/lib/site-config'
 import { cn } from '@/lib/utils'
@@ -12,13 +12,9 @@ export const NAVBAR_OVERRIDE_ENABLED = true
 
 const NAV_ITEMS = [
   { name: 'Home', href: '/' },
-  { name: 'Bookmarks', href: '/sbm' },
-  { name: 'Categories', href: '/sbm#categories' },
   { name: 'About', href: '/about' },
   { name: 'Contact', href: '/contact' },
 ]
-
-const PHONE = '(234) 345-4574'
 
 export function NavbarOverride() {
   const [open, setOpen] = useState(false)
@@ -53,7 +49,6 @@ export function NavbarOverride() {
           />
           <div className="hidden sm:block">
             <span className="block text-xl font-bold tracking-tight text-slate-900">{SITE_CONFIG.name}</span>
-            <span className="block text-[10px] font-semibold uppercase tracking-[0.22em] text-[#1d3aa6]">Social Bookmarking</span>
           </div>
         </Link>
 

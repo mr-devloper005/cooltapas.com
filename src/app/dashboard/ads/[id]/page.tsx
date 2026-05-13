@@ -15,7 +15,6 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useToast } from '@/components/ui/use-toast'
-import { mockClassifiedAds } from '@/data/mock-data'
 import type { ClassifiedAd } from '@/types'
 import { loadFromStorage, storageKeys } from '@/lib/local-storage'
 import { useAuth } from '@/lib/auth-context'
@@ -25,7 +24,7 @@ export default function DashboardAdDetailPage({ params }: { params: Promise<{ id
   const { toast } = useToast()
   const { user } = useAuth()
   const [storedAds, setStoredAds] = useState<ClassifiedAd[]>([])
-  const allAds = useMemo(() => [...storedAds, ...mockClassifiedAds], [storedAds])
+  const allAds = useMemo(() => storedAds, [storedAds])
   const ad = allAds.find((item) => item.id === resolvedParams.id)
   const canEdit = ad ? (ad.id.startsWith('user-') || (user && ad.seller.id === user.id)) : false
 

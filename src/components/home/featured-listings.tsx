@@ -4,10 +4,16 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ListingCard } from '@/components/shared/cards'
-import { mockListings } from '@/data/mock-data'
+import { useMemo } from 'react'
+import { loadFromStorage, storageKeys } from '@/lib/local-storage'
+import type { Listing } from '@/types'
 
 export function FeaturedListings() {
-  const featuredListings = mockListings.filter(l => l.isFeatured).slice(0, 4)
+  const featuredListings = useMemo(
+    () => loadFromStorage<Listing[]>(storageKeys.listings, []).slice(0, 4),
+    []
+  )
+  if (!featuredListings.length) return null
 
   return (
     <section className="border-b border-border py-16">

@@ -11,7 +11,6 @@ import { BookmarkCard } from '@/components/sbm/bookmark-card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
-import { mockBookmarkCollections } from '@/data/mock-data'
 import type { BookmarkCollection } from '@/types'
 import { loadFromStorage, saveToStorage, storageKeys } from '@/lib/local-storage'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
@@ -23,14 +22,10 @@ export default function BookmarkCollectionDetailPage() {
   const [storedCollections, setStoredCollections] = useState<BookmarkCollection[]>([])
   const [confirmDelete, setConfirmDelete] = useState(false)
   const { toast } = useToast()
-  const collection = useMemo(() => {
-    const map = new Map<string, BookmarkCollection>()
-    storedCollections.forEach((item) => map.set(item.id, item))
-    mockBookmarkCollections.forEach((item) => {
-      if (!map.has(item.id)) map.set(item.id, item)
-    })
-    return map.get(id)
-  }, [id, storedCollections])
+  const collection = useMemo(
+    () => storedCollections.find((item) => item.id === id),
+    [id, storedCollections]
+  )
 
   useEffect(() => {
     setStoredCollections(loadFromStorage<BookmarkCollection[]>(storageKeys.bookmarkCollections, []))
