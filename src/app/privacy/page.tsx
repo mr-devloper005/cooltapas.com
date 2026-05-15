@@ -59,7 +59,7 @@ const SECTIONS = [
     body: [
       'Access, correct, export, or delete your data at any time from Settings.',
       'If you are in the EU, UK, or California, you have additional rights under GDPR and CCPA.',
-      'Contact privacy@cooltapas.com with any request — we respond within 30 days.',
+      'Submit any privacy request through our contact page — we respond within 30 days.',
     ],
   },
   {
@@ -156,7 +156,7 @@ export default function PrivacyPage() {
             <Mail className="h-8 w-8" />
             <h3 className="mt-4 text-2xl font-bold tracking-tight">Questions about your data?</h3>
             <p className="mt-2 text-blue-100">
-              Email <a className="underline" href="mailto:privacy@cooltapas.com">privacy@cooltapas.com</a> and we'll respond within 30 days. You can also export or delete your account any time from Settings.
+              Use our contact page for data questions. You can also export or delete your account any time from Settings.
             </p>
             <Link href="/contact" className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-bold text-[#0f1c4d] hover:bg-slate-100">
               Contact the team <ArrowRight className="h-4 w-4" />

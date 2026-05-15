@@ -30,31 +30,17 @@ import {
   SheetDescription,
 } from '@/components/ui/sheet'
 import { useToast } from '@/components/ui/use-toast'
-import { mockClassifiedAds } from '@/data/mock-data'
 import type { ClassifiedAd } from '@/types'
 import { loadFromStorage, saveToStorage, storageKeys } from '@/lib/local-storage'
 import { useAuth } from '@/lib/auth-context'
 
-const mergeAds = (stored: ClassifiedAd[]) => {
-  const map = new Map<string, ClassifiedAd>()
-  stored.forEach((ad) => map.set(ad.id, ad))
-  mockClassifiedAds.forEach((ad) => {
-    if (!map.has(ad.id)) {
-      map.set(ad.id, ad)
-    }
-  })
-  return Array.from(map.values())
-}
-
 export default function DashboardAdsPage() {
   const { toast } = useToast()
   const { user } = useAuth()
-  const [ads, setAds] = useState<ClassifiedAd[]>(() => [...mockClassifiedAds])
+  const [ads, setAds] = useState<ClassifiedAd[]>([])
   const [deleteId, setDeleteId] = useState<string | null>(null)
   const [selectedIds, setSelectedIds] = useState<string[]>([])
-  const [statusMap, setStatusMap] = useState<Record<string, string>>(() =>
-    Object.fromEntries(mockClassifiedAds.map((ad) => [ad.id, ad.status]))
-  )
+  const [statusMap, setStatusMap] = useState<Record<string, string>>({})
   const [editingId, setEditingId] = useState<string | null>(null)
   const [draftTitle, setDraftTitle] = useState('')
   const [activeSheetId, setActiveSheetId] = useState<string | null>(null)
@@ -72,9 +58,8 @@ export default function DashboardAdsPage() {
 
   useEffect(() => {
     const stored = loadFromStorage<ClassifiedAd[]>(storageKeys.ads, [])
-    const merged = mergeAds(stored)
-    setAds(merged)
-    setStatusMap(Object.fromEntries(merged.map((ad) => [ad.id, ad.status])))
+    setAds(stored)
+    setStatusMap(Object.fromEntries(stored.map((ad) => [ad.id, ad.status])))
   }, [])
 
   const persistUserAds = (nextAds: ClassifiedAd[]) => {

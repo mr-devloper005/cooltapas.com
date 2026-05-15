@@ -8,7 +8,6 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
-import { mockArticles } from '@/data/mock-data'
 import { loadFromStorage, saveToStorage, storageKeys } from '@/lib/local-storage'
 import type { Article } from '@/types'
 import { useAuth } from '@/lib/auth-context'
@@ -20,7 +19,7 @@ export default function DashboardArticleEditPage({ params }: { params: Promise<{
   const [saved, setSaved] = useState(false)
   const [storedArticles, setStoredArticles] = useState<Article[]>([])
   const article = useMemo(
-    () => [...storedArticles, ...mockArticles].find((item) => item.id === resolvedParams.id),
+    () => storedArticles.find((item) => item.id === resolvedParams.id),
     [resolvedParams.id, storedArticles]
   )
   const canEdit = article ? (article.id.startsWith('user-') || (user && article.author.id === user.id)) : false

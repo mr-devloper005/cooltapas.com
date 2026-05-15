@@ -1,11 +1,8 @@
 import Link from 'next/link'
-import { Bookmark, Facebook, Twitter, Instagram, Linkedin, Phone, Mail, MapPin } from 'lucide-react'
+import { Bookmark } from 'lucide-react'
 import { SITE_CONFIG } from '@/lib/site-config'
 
 export const FOOTER_OVERRIDE_ENABLED = true
-
-const PHONE = '(234) 345-4574'
-const EMAIL = 'hello@cooltapas.com'
 
 export function FooterOverride() {
   const year = new Date().getFullYear()
@@ -22,19 +19,11 @@ export function FooterOverride() {
               />
               <div>
                 <p className="text-xl font-bold text-white">{SITE_CONFIG.name}</p>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-300">Social Bookmarking</p>
               </div>
             </Link>
             <p className="mt-5 text-sm leading-7 text-slate-300">
               The fastest way to save, organize, and share the links and resources you actually want to come back to.
             </p>
-            <div className="mt-5 flex gap-3">
-              {[Facebook, Twitter, Instagram, Linkedin].map((Icon, i) => (
-                <a key={i} href="#" className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 hover:bg-white/20" aria-label="social">
-                  <Icon className="h-4 w-4 text-white" />
-                </a>
-              ))}
-            </div>
           </div>
 
           <div>
@@ -43,9 +32,7 @@ export function FooterOverride() {
               {[
                 ['Home', '/'],
                 ['Bookmarks', '/sbm'],
-                ['Categories', '/sbm#categories'],
                 ['Submit a Link', '/sbm/submit'],
-                ['Trending', '/sbm'],
               ].map(([n, h]) => (
                 <li key={n}>
                   <Link href={h} className="text-slate-300 hover:text-white">{n}</Link>
@@ -71,23 +58,6 @@ export function FooterOverride() {
             </ul>
           </div>
 
-          <div>
-            <h3 className="text-sm font-bold uppercase tracking-wider text-white">Get In Touch</h3>
-            <ul className="mt-5 space-y-3 text-sm">
-              <li className="flex items-start gap-3">
-                <Phone className="mt-0.5 h-4 w-4 text-slate-300" />
-                <a href={`tel:${PHONE.replace(/[^0-9+]/g, '')}`} className="text-slate-300 hover:text-white">{PHONE}</a>
-              </li>
-              <li className="flex items-start gap-3">
-                <Mail className="mt-0.5 h-4 w-4 text-slate-300" />
-                <a href={`mailto:${EMAIL}`} className="text-slate-300 hover:text-white">{EMAIL}</a>
-              </li>
-              <li className="flex items-start gap-3">
-                <MapPin className="mt-0.5 h-4 w-4 text-slate-300" />
-                <span className="text-slate-300">Available worldwide, online 24/7</span>
-              </li>
-            </ul>
-          </div>
         </div>
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-xs text-slate-400 sm:flex-row">

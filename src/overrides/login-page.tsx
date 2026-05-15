@@ -3,14 +3,12 @@
 import { useState, type FormEvent } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Bookmark, Loader2, Phone, Sparkles, Check } from 'lucide-react'
+import { Bookmark, Loader2, Sparkles, Check } from 'lucide-react'
 import { NavbarShell } from '@/components/shared/navbar-shell'
 import { Footer } from '@/components/shared/footer'
 import { useAuth } from '@/lib/auth-context'
 
 export const LOGIN_PAGE_OVERRIDE_ENABLED = true
-
-const PHONE = '(234) 345-4574'
 
 export function LoginPageOverride() {
   const router = useRouter()
@@ -63,13 +61,6 @@ export function LoginPageOverride() {
                 </li>
               ))}
             </ul>
-            <a
-              href={`tel:${PHONE.replace(/[^0-9+]/g, '')}`}
-              className="mt-10 inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-bold text-[#0f1c4d] hover:bg-slate-100"
-            >
-              <Phone className="h-4 w-4" />
-              Need help? {PHONE}
-            </a>
           </div>
 
           <div className="rounded-3xl bg-white p-10 shadow-md ring-1 ring-slate-200">

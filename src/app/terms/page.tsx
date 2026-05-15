@@ -22,7 +22,7 @@ const SECTIONS = [
     body: [
       'You must be at least 13 years old to use Cooltapas.',
       'You are responsible for keeping your password secure and for all activity that happens under your account.',
-      'Notify us immediately if you suspect unauthorized access at security@cooltapas.com.',
+      'Notify us immediately if you suspect unauthorized access.',
     ],
   },
   {
@@ -158,7 +158,7 @@ export default function TermsPage() {
             <Mail className="h-8 w-8" />
             <h3 className="mt-4 text-2xl font-bold tracking-tight">Need legal clarification?</h3>
             <p className="mt-2 text-blue-100">
-              Email <a className="underline" href="mailto:legal@cooltapas.com">legal@cooltapas.com</a> with any questions about these terms.
+              For legal clarification, use our contact page and our team will guide you.
             </p>
             <Link href="/contact" className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-bold text-[#0f1c4d] hover:bg-slate-100">
               Contact the team <ArrowRight className="h-4 w-4" />

@@ -8,7 +8,6 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
-import { mockListings } from '@/data/mock-data'
 import { loadFromStorage, saveToStorage, storageKeys } from '@/lib/local-storage'
 import type { Listing } from '@/types'
 import { useAuth } from '@/lib/auth-context'
@@ -20,7 +19,7 @@ export default function DashboardListingEditPage({ params }: { params: Promise<{
   const [saved, setSaved] = useState(false)
   const [storedListings, setStoredListings] = useState<Listing[]>([])
   const listing = useMemo(
-    () => [...storedListings, ...mockListings].find((item) => item.id === resolvedParams.id),
+    () => storedListings.find((item) => item.id === resolvedParams.id),
     [resolvedParams.id, storedListings]
   )
   const canEdit = listing ? (listing.id.startsWith('user-') || (user && listing.owner.id === user.id)) : false
