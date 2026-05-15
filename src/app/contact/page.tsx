@@ -1,18 +1,32 @@
-import { Mail, MessageSquareText, ShieldCheck } from 'lucide-react';
+'use client'
 
-import { ContactLeadForm } from '@/components/shared/contact-lead-form';
-import { Footer } from '@/components/shared/footer';
-import { NavbarShell } from '@/components/shared/navbar-shell';
+import { useState, type FormEvent } from 'react'
+import { Mail, Phone, MapPin, Send, Clock, MessageSquare, HelpCircle, Sparkles, Check } from 'lucide-react'
+import { NavbarShell } from '@/components/shared/navbar-shell'
+import { Footer } from '@/components/shared/footer'
+import { ContactLeadForm } from "@/components/shared/contact-lead-form";
 
-const siteName = process.env.NEXT_PUBLIC_SITE_NAME || 'Cooltapas';
+const PHONE = '(234) 345-4574'
+const EMAIL = 'hello@cooltapas.com'
 
-const contactHighlights = [
-  { icon: Mail, title: 'Direct response', copy: 'Your message is saved securely and routed to the right team.' },
-  { icon: MessageSquareText, title: 'Clear details', copy: 'Share your requirement, question, or collaboration idea in one place.' },
-  { icon: ShieldCheck, title: 'Reliable follow-up', copy: 'We keep the request record so every conversation stays traceable.' },
-];
+const CHANNELS = [
+  { icon: Mail, label: 'Email us', value: EMAIL, href: `mailto:${EMAIL}` },
+  { icon: Phone, label: 'Call us', value: PHONE, href: `tel:${PHONE.replace(/[^0-9+]/g, '')}` },
+  { icon: MessageSquare, label: 'Live chat', value: 'Mon-Fri · 9am-6pm', href: '#' },
+  { icon: Clock, label: 'Response time', value: 'Within 24 hours', href: '#' },
+]
+
+const REASONS = ['General question', 'Partnership', 'Press', 'Bug report', 'Feature request', 'Something else']
 
 export default function ContactPage() {
+  const [sent, setSent] = useState(false)
+  const [reason, setReason] = useState('General question')
+
+  function onSubmit(e: FormEvent) {
+    e.preventDefault()
+    setSent(true)
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100 text-slate-950">
       <NavbarShell />
@@ -46,11 +60,21 @@ export default function ContactPage() {
               </div>
             </div>
 
-            <ContactLeadForm />
+            <div className="rounded-3xl bg-[#0f1c4d] p-8 text-white shadow-md">
+              <HelpCircle className="h-7 w-7" />
+              <h3 className="mt-4 text-xl font-bold">Looking for quick answers?</h3>
+              <p className="mt-2 text-sm leading-7 text-slate-200">
+                Our Help Center covers the most common questions about accounts, bookmarks, collections, and privacy.
+              </p>
+              <a href="/help" className="mt-5 inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-[#0f1c4d] hover:bg-slate-100">
+                Visit Help Center
+              </a>
+            </div>
           </div>
-        </section>
-      </main>
+        </div>
+      </section>
+
       <Footer />
     </div>
-  );
+  )
 }
