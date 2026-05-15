@@ -9,30 +9,18 @@ import type { TaskKey } from '@/lib/site-config'
 export const TASK_LIST_PAGE_OVERRIDE_ENABLED = true
 
 const CATEGORIES = [
-  { name: 'Technology', count: 1240 },
-  { name: 'Design', count: 980 },
-  { name: 'Business', count: 712 },
-  { name: 'Marketing', count: 654 },
-  { name: 'Productivity', count: 580 },
-  { name: 'Lifestyle', count: 440 },
-  { name: 'Travel', count: 360 },
-  { name: 'Food', count: 310 },
-  { name: 'Science', count: 265 },
-  { name: 'Education', count: 248 },
-  { name: 'Finance', count: 219 },
-  { name: 'Health', count: 201 },
-]
-
-const PLACEHOLDER_POSTS = [
-  { title: 'The Ultimate Guide to Reading More Online', summary: 'How to build a distraction-free reading queue that actually gets read.', category: 'Productivity', author: 'Lena Vasquez', upvotes: 248, img: 'https://images.unsplash.com/photo-1519682337058-a94d519337bc?w=800&q=80' },
-  { title: 'Why Tagging Beats Folders Every Time', summary: 'A case for tag-first organization in a folder-first world.', category: 'Workflow', author: 'Marcus Reed', upvotes: 192, img: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800&q=80' },
-  { title: 'Curating a Design Inspiration Shelf', summary: 'How to collect references without drowning in them.', category: 'Design', author: 'Aiko Tanaka', upvotes: 168, img: 'https://images.unsplash.com/photo-1558655146-d09347e92766?w=800&q=80' },
-  { title: 'Research Bookmarks for Long-Form Writers', summary: 'A peek into the bookmark systems of working essayists.', category: 'Writing', author: 'Samuel Okafor', upvotes: 141, img: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=800&q=80' },
-  { title: 'Save First, Read Later: An Honest Retrospective', summary: 'What two years of save-first browsing taught me.', category: 'Reflection', author: 'Priya Shah', upvotes: 129, img: 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800&q=80' },
-  { title: 'The Best Bookmarklets of 2026', summary: 'A handful of tiny tools that make saving the web painless.', category: 'Tools', author: 'Derek Hill', upvotes: 118, img: 'https://images.unsplash.com/photo-1481487196290-c152efe083f5?w=800&q=80' },
-  { title: 'Building a Reading Shelf That Gets Read', summary: 'Shelves beat queues when you plan for your future self.', category: 'Reading', author: 'Jules Martin', upvotes: 96, img: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=800&q=80' },
-  { title: 'How Curators Find New Curators', summary: 'The quiet art of following people who follow things.', category: 'Community', author: 'Hannah Park', upvotes: 82, img: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80' },
-  { title: 'Why Your Bookmark Bar Is Failing You', summary: 'Browser bookmarks stopped scaling. Here is what replaced mine.', category: 'Tech', author: 'Evan Cole', upvotes: 74, img: 'https://images.unsplash.com/photo-1483058712412-4245e9b90334?w=800&q=80' },
+  { name: 'Technology' },
+  { name: 'Design' },
+  { name: 'Business' },
+  { name: 'Marketing' },
+  { name: 'Productivity' },
+  { name: 'Lifestyle' },
+  { name: 'Travel' },
+  { name: 'Food' },
+  { name: 'Science' },
+  { name: 'Education' },
+  { name: 'Finance' },
+  { name: 'Health' },
 ]
 
 type Card = {
@@ -55,12 +43,10 @@ function normalize(posts: any[], limit: number): Card[] {
     img:
       (Array.isArray(p.media) && p.media[0]?.url) ||
       (typeof p.content === 'object' && Array.isArray((p.content as any)?.images) && (p.content as any).images[0]) ||
-      PLACEHOLDER_POSTS[i % PLACEHOLDER_POSTS.length].img,
+      '/favicon.png',
     href: `/sbm/${p.slug}`,
   }))
-  if (mapped.length >= limit) return mapped
-  const need = limit - mapped.length
-  return [...mapped, ...PLACEHOLDER_POSTS.slice(0, need)]
+  return mapped
 }
 
 export async function TaskListPageOverride({ task, category }: { task: TaskKey; category?: string }) {
@@ -119,7 +105,6 @@ export async function TaskListPageOverride({ task, category }: { task: TaskKey; 
                   <Tag className="h-4 w-4" />
                 </div>
                 <p className={`mt-3 text-sm font-bold ${active ? 'text-white' : 'text-slate-900'}`}>{c.name}</p>
-                <p className={`text-xs ${active ? 'text-blue-100' : 'text-slate-500'}`}>{c.count.toLocaleString()} saves</p>
               </Link>
             )
           })}
@@ -188,17 +173,7 @@ export async function TaskListPageOverride({ task, category }: { task: TaskKey; 
       </section>
 
       <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
-        <div className="flex items-end justify-between gap-4">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#1d3aa6]">Latest</p>
-            <h2 className="mt-2 text-3xl font-bold tracking-tight">Fresh bookmarks</h2>
-          </div>
-          <Link href="/sbm/submit" className="hidden items-center gap-2 rounded-full bg-[#1d3aa6] px-4 py-2 text-sm font-bold text-white hover:bg-[#162d80] sm:inline-flex">
-            <Plus className="h-4 w-4" /> Add yours
-          </Link>
-        </div>
-
-        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {rest.map((c, i) => (
             <Link key={i} href={c.href || '#'} className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:border-[#1d3aa6] hover:shadow-lg">
               <div className="relative h-36 overflow-hidden">

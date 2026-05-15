@@ -1,6 +1,5 @@
 import { SITE_CONFIG, type TaskKey } from "./site-config";
 import { fetchSiteFeed, type SiteFeed, type SitePost } from "./site-connector";
-import { getMockPostsForTask } from "./mock-posts";
 import { isValidCategory } from "./categories";
 
 const getTaskContentType = (task: TaskKey) =>
@@ -28,9 +27,8 @@ export const getPostTaskKey = (post: SitePost): TaskKey | null => {
 export const fetchTaskPosts = async (
   task: TaskKey,
   limit = 8,
-  options?: { allowMockFallback?: boolean; fresh?: boolean }
+  options?: { fresh?: boolean }
 ) => {
-  const allowMockFallback = options?.allowMockFallback ?? process.env.NEXT_PUBLIC_USE_MOCK_CONTENT === "true";
   const type = getTaskContentType(task);
   const pickTaskPosts = (feed: SiteFeed<SitePost> | null) => {
     if (!feed) return [];
@@ -56,16 +54,13 @@ export const fetchTaskPosts = async (
 
     const freshFeed = await fetchSiteFeed(limit * 6, { fresh: true });
     const filtered = pickTaskPosts(freshFeed);
-    return filtered.length || !allowMockFallback
-      ? filtered
-      : getMockPostsForTask(task).slice(0, limit);
+    return filtered;
   } catch {
-    return allowMockFallback ? getMockPostsForTask(task).slice(0, limit) : [];
+    return [];
   }
 };
 
 export const fetchTaskPostBySlug = async (task: TaskKey, slug: string) => {
-  const allowMockFallback = process.env.NEXT_PUBLIC_USE_MOCK_CONTENT === "true";
   const type = getTaskContentType(task);
   const resolveFromFeed = (feed: SiteFeed<SitePost> | null) =>
     feed?.posts.find((post) => post.slug === slug && getPostType(post) === type) || null;
@@ -79,12 +74,10 @@ export const fetchTaskPostBySlug = async (task: TaskKey, slug: string) => {
     const freshMatch = resolveFromFeed(freshFeed);
     if (freshMatch) return freshMatch;
   } catch {
-    // fall through to mock data
+    return null;
   }
 
-  return allowMockFallback
-    ? getMockPostsForTask(task).find((post) => post.slug === slug) || null
-    : null;
+  return null;
 };
 
 export const buildPostUrl = (task: TaskKey, slug: string) => {

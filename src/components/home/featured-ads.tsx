@@ -4,10 +4,16 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ClassifiedAdCard } from '@/components/shared/cards'
-import { mockClassifiedAds } from '@/data/mock-data'
+import { useMemo } from 'react'
+import { loadFromStorage, storageKeys } from '@/lib/local-storage'
+import type { ClassifiedAd } from '@/types'
 
 export function FeaturedAds() {
-  const featuredAds = mockClassifiedAds.filter(a => a.isFeatured).slice(0, 4)
+  const featuredAds = useMemo(
+    () => loadFromStorage<ClassifiedAd[]>(storageKeys.ads, []).slice(0, 4),
+    []
+  )
+  if (!featuredAds.length) return null
 
   return (
     <section className="border-b border-border py-16">

@@ -30,31 +30,17 @@ import {
   SheetDescription,
 } from '@/components/ui/sheet'
 import { useToast } from '@/components/ui/use-toast'
-import { mockListings } from '@/data/mock-data'
 import type { Listing } from '@/types'
 import { loadFromStorage, saveToStorage, storageKeys } from '@/lib/local-storage'
 import { useAuth } from '@/lib/auth-context'
 
-const mergeListings = (stored: Listing[]) => {
-  const map = new Map<string, Listing>()
-  stored.forEach((listing) => map.set(listing.id, listing))
-  mockListings.forEach((listing) => {
-    if (!map.has(listing.id)) {
-      map.set(listing.id, listing)
-    }
-  })
-  return Array.from(map.values())
-}
-
 export default function DashboardListingsPage() {
   const { toast } = useToast()
   const { user } = useAuth()
-  const [listings, setListings] = useState<Listing[]>(() => [...mockListings])
+  const [listings, setListings] = useState<Listing[]>([])
   const [deleteId, setDeleteId] = useState<string | null>(null)
   const [selectedIds, setSelectedIds] = useState<string[]>([])
-  const [statusMap, setStatusMap] = useState<Record<string, string>>(() =>
-    Object.fromEntries(mockListings.map((listing) => [listing.id, listing.status]))
-  )
+  const [statusMap, setStatusMap] = useState<Record<string, string>>({})
   const [editingId, setEditingId] = useState<string | null>(null)
   const [draftTitle, setDraftTitle] = useState('')
   const [activeSheetId, setActiveSheetId] = useState<string | null>(null)
@@ -72,9 +58,8 @@ export default function DashboardListingsPage() {
 
   useEffect(() => {
     const stored = loadFromStorage<Listing[]>(storageKeys.listings, [])
-    const merged = mergeListings(stored)
-    setListings(merged)
-    setStatusMap(Object.fromEntries(merged.map((listing) => [listing.id, listing.status])))
+    setListings(stored)
+    setStatusMap(Object.fromEntries(stored.map((listing) => [listing.id, listing.status])))
   }, [])
 
   const persistUserListings = (nextListings: Listing[]) => {
