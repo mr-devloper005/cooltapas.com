@@ -1,5 +1,5 @@
 import { SITE_CONFIG, type TaskKey } from "./site-config";
-import { fetchSiteFeed, type SiteFeed, type SitePost } from "./site-connector";
+import { fetchSiteFeed, fetchSitePostBySlug, type SiteFeed, type SitePost } from "./site-connector";
 import { isValidCategory } from "./categories";
 
 const getTaskContentType = (task: TaskKey) =>
@@ -61,23 +61,22 @@ export const fetchTaskPosts = async (
 };
 
 export const fetchTaskPostBySlug = async (task: TaskKey, slug: string) => {
+  const allowMockFallback = process.env.NEXT_PUBLIC_USE_MOCK_CONTENT === "true";
   const type = getTaskContentType(task);
-  const resolveFromFeed = (feed: SiteFeed<SitePost> | null) =>
-    feed?.posts.find((post) => post.slug === slug && getPostType(post) === type) || null;
 
   try {
-    const cachedFeed = await fetchSiteFeed(200);
-    const cachedMatch = resolveFromFeed(cachedFeed);
-    if (cachedMatch) return cachedMatch;
+    const directMatch = await fetchSitePostBySlug<SitePost>(slug, { task: type });
+    if (directMatch?.post) return directMatch.post;
 
-    const freshFeed = await fetchSiteFeed(200, { fresh: true });
-    const freshMatch = resolveFromFeed(freshFeed);
-    if (freshMatch) return freshMatch;
+    const freshDirectMatch = await fetchSitePostBySlug<SitePost>(slug, { task: type, fresh: true });
+    if (freshDirectMatch?.post) return freshDirectMatch.post;
   } catch {
-    return null;
+    // If the public API is temporarily unavailable, do not scan large feeds.
   }
 
-  return null;
+  return allowMockFallback
+    ? getMockPostsForTask(task).find((post) => post.slug === slug) || null
+    : null;
 };
 
 export const buildPostUrl = (task: TaskKey, slug: string) => {
