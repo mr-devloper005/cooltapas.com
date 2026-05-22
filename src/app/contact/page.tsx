@@ -8,6 +8,14 @@ import { ContactLeadForm } from "@/components/shared/contact-lead-form";
 
 const PHONE = '(234) 345-4574'
 const EMAIL = 'hello@cooltapas.com'
+const siteName = 'Cool Tapas'
+
+
+const contactHighlights = [
+  { icon: Mail, title: 'Email support', copy: 'Send questions, partnership notes, or account requests to the team.' },
+  { icon: Phone, title: 'Quick response', copy: 'Share the full context and we will route it to the right person.' },
+  { icon: Sparkles, title: 'Project help', copy: 'Use the form for listings, publishing support, and collaboration requests.' },
+]
 
 const CHANNELS = [
   { icon: Mail, label: 'Email us', value: EMAIL, href: `mailto:${EMAIL}` },
@@ -61,18 +69,21 @@ export default function ContactPage() {
             </div>
 
             <div className="rounded-3xl bg-[#0f1c4d] p-8 text-white shadow-md">
-              <HelpCircle className="h-7 w-7" />
-              <h3 className="mt-4 text-xl font-bold">Looking for quick answers?</h3>
-              <p className="mt-2 text-sm leading-7 text-slate-200">
-                Our Help Center covers the most common questions about accounts, bookmarks, collections, and privacy.
-              </p>
-              <a href="/help" className="mt-5 inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-[#0f1c4d] hover:bg-slate-100">
-                Visit Help Center
-              </a>
+              <ContactLeadForm />
+              <div className="mt-8 border-t border-white/15 pt-6">
+                <HelpCircle className="h-7 w-7" />
+                <h3 className="mt-4 text-xl font-bold">Looking for quick answers?</h3>
+                <p className="mt-2 text-sm leading-7 text-slate-200">
+                  Our Help Center covers the most common questions about accounts, bookmarks, collections, and privacy.
+                </p>
+                <a href="/help" className="mt-5 inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-[#0f1c4d] hover:bg-slate-100">
+                  Visit Help Center
+                </a>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </main>
 
       <Footer />
     </div>
