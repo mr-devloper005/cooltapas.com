@@ -1,8 +1,6 @@
-import DetailPage, { generateMetadata } from "../../articles/[slug]/page";
-
+import Page from "../../articles/[slug]/page";
 
 export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
 export const revalidate = 3;
-export { generateMetadata };
-export default DetailPage;
+export default Page;
