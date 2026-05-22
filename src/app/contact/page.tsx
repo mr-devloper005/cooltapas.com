@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useState, type FormEvent } from 'react'
 import { Mail, Phone, MapPin, Send, Clock, MessageSquare, HelpCircle, Sparkles, Check } from 'lucide-react'
